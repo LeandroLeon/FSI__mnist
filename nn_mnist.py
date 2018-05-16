@@ -50,14 +50,16 @@ y_dataTest = one_hot(test_y.astype(int), 10)
 x = tf.placeholder("float", [None, 784])
 y_ = tf.placeholder("float", [None, 10])
 
-w1 = tf.Variable(np.float32(np.random.rand(784, 20)) * 0.1)
-b1 = tf.Variable(np.float32(np.random.rand(20)) * 0.1)
+w1 = tf.Variable(np.float32(np.random.rand(784, 10)) * 0.1)
+b1 = tf.Variable(np.float32(np.random.rand(10)) * 0.1)
 
-w2 = tf.Variable(np.float32(np.random.rand(20, 10)) * 0.1)
+w2 = tf.Variable(np.float32(np.random.rand(10, 10)) * 0.1)
 b2 = tf.Variable(np.float32(np.random.rand(10)) * 0.1)
+
 
 h = tf.nn.sigmoid(tf.matmul(x, w1) + b1)
 y = tf.nn.softmax(tf.matmul(h, w2) + b2)
+
 
 loss = tf.reduce_sum(tf.square(y_ - y))
 
@@ -98,19 +100,26 @@ for epoch in range(100):
     a_valError.append(actualValError)
     print("Epoch #:", epoch, "Error: ", trainError)
     result = sess.run(y, feed_dict={x: batch_xs})
-    for b, r in zip(batch_ys, result):
-        print(b, "-->", r)
-    print("----------------------------------------------------------------------------------")
 
-    if abs(valError1-valError0)/valError0 < 0.0001:
+    """
+        for b, r in zip(batch_ys, result):
+            print(b, "-->", r)
+        print("----------------------------------------------------------------------------------")
+    """
+
+    if abs(valError1-valError0)/valError0 < 0.00001:
+        print("------- Resultados Finales -------")
         print("Epoch: #", epoch)
         print("Error de Validacion Final ---> ", valError1)
         print("Error de Entrenamiento Final --->", trainError)
         break
 
 
+
+
+
 print("----------------------")
-print("   Start Test...  ")
+print("      Start Test...   ")
 print("----------------------")
 
 aciertos = 0
@@ -149,6 +158,6 @@ plt.ylabel("Error")
 plt.title("Error de Validacion")
 plt.plot(a_valError, 'g')
 
-
-
+plt.savefig("figuras/Figura3.jpeg")
 plt.show()
+
